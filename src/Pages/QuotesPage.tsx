@@ -1,5 +1,6 @@
 import React from "react";
 import { Table } from '../Components/Table';
+import { Filter } from '../Components/Filter';
 import axios from 'axios';
 import { IQuote, IQuoteInfo } from '../models';
 
@@ -7,6 +8,8 @@ interface IQuotesPage {
     quotes: IQuoteInfo[]
     loading: boolean
     eMessage: string
+    priceStart: string
+    priceEnd: string
 }
 
 export class QuotesPage extends React.Component<{}, IQuotesPage> {
@@ -19,7 +22,9 @@ export class QuotesPage extends React.Component<{}, IQuotesPage> {
         this.state = {
             quotes: [],
             loading: true,
-            eMessage: ''
+            eMessage: '',
+            priceStart: '',
+            priceEnd: '',
         }
     }
 
@@ -44,7 +49,6 @@ export class QuotesPage extends React.Component<{}, IQuotesPage> {
         this.setState({ loading: true })
         this.fetchQuotes()
 
-
         this.interval = window.setInterval(() => {
             this.fetchQuotes();
             console.log('Get');
@@ -53,10 +57,35 @@ export class QuotesPage extends React.Component<{}, IQuotesPage> {
             , 5000);
     }
 
+    handleChangeStart = (value: string) => {
+        this.setState({ priceStart: value })
+        this.filter()
+    }
+
+    handleChangeEnd = (value: string) => {
+        this.setState({ priceEnd: value })
+        this.filter()
+    }
+    
+    filter() {
+        let dataPriceFilter = this.state.quotes
+        console.log(this.state.quotes, 1);
+        if (this.state.priceStart) {
+            dataPriceFilter = dataPriceFilter.filter(d => Number(d.last) >= Number(this.state.priceStart))
+            this.setState({ quotes: dataPriceFilter })
+            console.log(dataPriceFilter, 2);
+        }
+        if (this.state.priceEnd) {
+            dataPriceFilter = dataPriceFilter.filter(d => Number(d.last) <= Number(this.state.priceEnd))
+            this.setState({ quotes: dataPriceFilter })
+        }
+    }
+
     render() {
         return (
-            < div className='container mx-auto max-w-max pt-5' >
-                {this.state.loading && <p>Загрузка...</p>}
+            < div className='container flex mx-auto max-w-max pt-5' >
+                <Filter handleChangeStart={this.handleChangeStart} handleChangeEnd={this.handleChangeEnd} />
+                {this.state.loading && <h1>Загрузка...</h1>}
                 {this.state.loading || <Table data={this.state.quotes} eMessage={this.state.eMessage} />}
             </div >
         )
