@@ -1,5 +1,5 @@
 import React from "react"
-import { IIdModel, IQuote, IQuoteInfo } from "../models"
+import { IIdModel } from "../models"
 import { THead } from "./THead"
 import { TBody } from "./TBody"
 

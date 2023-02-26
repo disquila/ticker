@@ -1,9 +1,7 @@
 import React from "react";
 import { TCell } from "./TCell";
 import { columns } from '../Data/THeadData'
-import { IIdModel, IQuote, IQuoteInfo } from "../models"
-import { Quote } from "./Quote";
-
+import { IIdModel } from "../models"
 
 interface ITRowProps<R extends IIdModel> {
     row: R

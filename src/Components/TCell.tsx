@@ -1,5 +1,4 @@
 import React from "react";
-import { IQuote, IQuoteInfo } from "../models"
 
 interface ITCellProps<E = any> {
     cell: E
