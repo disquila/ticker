@@ -1,13 +1,12 @@
 import { makeAutoObservable } from 'mobx'
 
 
-class FilterStore {
-    priceStart?: number
-    priceEnd?: number
+class CellClassesStore {
+    cellClasses: string = ''
     
     constructor() {
         makeAutoObservable(this)
     }
 }
 
-export default new FilterStore()
+export default new CellClassesStore()

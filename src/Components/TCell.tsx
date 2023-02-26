@@ -1,28 +1,27 @@
-import React from "react";
+import { observer } from "mobx-react"
+import React from "react"
+import cellClassesStore from "../Store/cellClassesStore"
 
 interface ITCellProps<E = any> {
     cell: E
 }
 
-export class TCell extends React.Component<ITCellProps, { cellClasses: string }> {
+@observer
+export class TCell extends React.Component<ITCellProps> {
 
-    constructor(cell: ITCellProps) {
-        super(cell)
-        this.state = {
-            cellClasses: ''
-        }
-    }
+    cellClasses: string = ''
 
     componentDidUpdate(prevProps: any) {
         if ((prevProps.cell) > (this.props.cell)) {
-            this.setState({ cellClasses: 'text-red-500 font-bold' })
+            cellClassesStore.cellClasses = 'text-red-500 font-bold'
         } else if ((prevProps.cell) < (this.props.cell)) {
-            this.setState({ cellClasses: 'text-green-500 font-bold' })
+            cellClassesStore.cellClasses = 'text-green-500 font-bold'
         }
+        this.cellClasses = cellClassesStore.cellClasses
     }
 
     render() {
-        return <td className={this.state.cellClasses}>
+        return <td className={this.cellClasses}>
             {this.props.cell}
         </td >
     }
