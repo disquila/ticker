@@ -1,21 +1,16 @@
 import React from "react"
 import { observer } from 'mobx-react'
-import filterStore from "../Store/filterStore"
-import fetchQuotesStore from "../Store/fetchQuotesStore"
+import quotesStore from "../Store/quotesStore"
 
 @observer
 export class Filter extends React.Component<{}> {
 
     handleChangeStart = (e: React.ChangeEvent<HTMLInputElement>) => {
-        filterStore.priceStart = +e.target.value
+        quotesStore.tempStart = +e.target.value
     }
 
     handleChangeEnd = (e: React.ChangeEvent<HTMLInputElement>) => {
-        filterStore.priceEnd = +e.target.value
-    }
-
-    handleOnClick = () => {
-        fetchQuotesStore.filterApply()
+        quotesStore.tempEnd = +e.target.value
     }
 
     render() {
@@ -25,19 +20,19 @@ export class Filter extends React.Component<{}> {
                 <input className='px-2 py-2'
                     type="number"
                     placeholder="ОТ"
-                    value={filterStore.priceStart || ''}
+                    value={quotesStore.tempStart || ''}
                     name="priceStart"
                     onChange={this.handleChangeStart}
                 />
                 <input className='px-2 py-2'
                     type="number"
                     placeholder="ДО"
-                    value={filterStore.priceEnd || ''}
+                    value={quotesStore.tempEnd || ''}
                     name="priceEnd"
                     onChange={this.handleChangeEnd}
                 />
                 <div className="py-2 px-2">
-                    <button className="bg-blue-200 hover:bg-blue-300 text-black font-bold py-2 px-4 rounded" type="button" onClick={this.handleOnClick}>
+                    <button className="bg-blue-200 hover:bg-blue-300 text-black font-bold py-2 px-4 rounded" type="button" onClick={quotesStore.filterApply}>
                         Поиск
                     </button>
                 </div>

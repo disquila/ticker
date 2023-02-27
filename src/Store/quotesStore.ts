@@ -1,13 +1,14 @@
 import axios from 'axios'
 import { makeAutoObservable, runInAction } from 'mobx'
 import { IQuote, IQuoteInfo } from '../models'
-import filterStore from "./filterStore";
 
-class FetchQuotesStore {
+class QuotesStore {
     quotes: IQuoteInfo[] = []
     loading: boolean = true
     eMessage: string = ''
     interval: number = 0
+    tempStart?: number
+    tempEnd?: number
     priceStart?: number
     priceEnd?: number
 
@@ -24,16 +25,12 @@ class FetchQuotesStore {
             // if (this.test % 3 === 0) throw Error('BOOM')
             const { data } = await axios.get('/public?command=returnTicker')
             const dataMap = Object.entries(data as IQuote).map(([key, obj]) => ({ ...obj, name: key }))
-            if (this.priceStart || this.priceEnd) {
-                runInAction(() => {
-                    this.quotes = dataMap.filter(this.filterPriceRange)
-                })
-            } else {
-                runInAction(() => {
-                    this.quotes = dataMap
-                })
-            }
             runInAction(() => {
+                if (this.priceStart || this.priceEnd) {
+                    this.quotes = dataMap.filter(this.filterPriceRange)
+                } else {
+                    this.quotes = dataMap
+                }
                 this.eMessage = ''
             })
         } catch (error) {
@@ -60,10 +57,9 @@ class FetchQuotesStore {
 
 
     filterApply = () => {
-        return (
-            this.priceStart = filterStore.priceStart, this.priceEnd = filterStore.priceEnd,
-            this.fetchQuotes()
-        )
+        this.priceStart = this.tempStart
+        this.priceEnd = this.tempEnd
+        this.fetchQuotes()
     }
 
     filterPriceRange = (quote: IQuoteInfo) => {
@@ -71,4 +67,4 @@ class FetchQuotesStore {
     }
 }
 
-export default new FetchQuotesStore()
+export default new QuotesStore()

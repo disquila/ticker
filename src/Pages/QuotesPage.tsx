@@ -2,7 +2,7 @@ import React from "react"
 import { Table } from '../Components/Table'
 import { Filter } from '../Components/Filter'
 import { observer } from 'mobx-react'
-import fetchQuotesStore from "../Store/fetchQuotesStore"
+import fetchQuotesStore from "../Store/quotesStore"
 
 @observer
 export class QuotesPage extends React.Component<{}> {
